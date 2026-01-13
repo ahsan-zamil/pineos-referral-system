@@ -1,0 +1,290 @@
+{
+    "info": {
+        "name": "PineOS Referral System",
+        "description": "API collection for testing the PineOS referral system with financial ledger",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Health Check",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/health",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "health"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Credit Account",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Idempotency-Key",
+                        "value": "{{$guid}}",
+                        "type": "text"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"user_id\": \"user_123\",\n    \"amount_cents\": 10000,\n    \"reward_id\": \"welcome_bonus\",\n    \"reward_status\": \"confirmed\",\n    \"metadata\": {\n        \"source\": \"welcome_campaign\"\n    }\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/v1/ledger/credit",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "v1",
+                        "ledger",
+                        "credit"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Debit Account",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Idempotency-Key",
+                        "value": "{{$guid}}",
+                        "type": "text"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"user_id\": \"user_123\",\n    \"amount_cents\": 3000,\n    \"metadata\": {\n        \"reason\": \"reward_redemption\"\n    }\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/v1/ledger/debit",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "v1",
+                        "ledger",
+                        "debit"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Reverse Entry",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Idempotency-Key",
+                        "value": "{{$guid}}",
+                        "type": "text"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"entry_id\": \"<ENTRY_ID_HERE>\",\n    \"reason\": \"User not eligible\",\n    \"metadata\": {\n        \"admin_id\": \"admin_123\"\n    }\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/v1/ledger/reverse",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "v1",
+                        "ledger",
+                        "reverse"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get User Balance",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/api/v1/ledger/balance/:user_id",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "v1",
+                        "ledger",
+                        "balance",
+                        ":user_id"
+                    ],
+                    "variable": [
+                        {
+                            "key": "user_id",
+                            "value": "user_123"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get Ledger Entries",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/api/v1/ledger/entries?limit=10&offset=0",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "v1",
+                        "ledger",
+                        "entries"
+                    ],
+                    "query": [
+                        {
+                            "key": "limit",
+                            "value": "10"
+                        },
+                        {
+                            "key": "offset",
+                            "value": "0"
+                        },
+                        {
+                            "key": "user_id",
+                            "value": "user_123",
+                            "disabled": true
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Create Rule",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"Test Rule\",\n    \"description\": \"Test referral rule\",\n    \"rule_json\": {\n        \"conditions\": [\n            {\"field\": \"referrer.is_paid_user\", \"operator\": \"==\", \"value\": true}\n        ],\n        \"actions\": [\n            {\n                \"type\": \"credit\",\n                \"user\": \"referrer_id\",\n                \"amount_cents\": 50000,\n                \"reward_id\": \"test_bonus\"\n            }\n        ],\n        \"logic\": \"AND\"\n    }\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/v1/rules/",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "v1",
+                        "rules",
+                        ""
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get All Rules",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/api/v1/rules/",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "v1",
+                        "rules",
+                        ""
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Evaluate Event",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"event_data\": {\n        \"event_id\": \"evt_123\",\n        \"referrer_id\": \"user_alice\",\n        \"referrer\": {\n            \"is_paid_user\": true\n        },\n        \"referred\": {\n            \"subscription_status\": \"active\"\n        }\n    }\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/v1/rules/evaluate",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "v1",
+                        "rules",
+                        "evaluate"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Seed Example Rules",
+            "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/api/v1/rules/seed-examples",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "v1",
+                        "rules",
+                        "seed-examples"
+                    ]
+                }
+            }
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8000",
+            "type": "string"
+        }
+    ]
+}
