@@ -63,7 +63,7 @@ Guidelines for developers.
 
 Testing and review documentation.
 
-- **[TESTING.md](./qa/TESTING.md)** - Comprehensive testing guide with examples
+- **[TESTING.md](../TESTING.md)** - Comprehensive testing guide with examples (in root directory)
 - **[PROFESSIONAL_REVIEW_REPORT.md](./qa/PROFESSIONAL_REVIEW_REPORT.md)** - Complete professional code review and testing report
 
 ---
@@ -79,7 +79,7 @@ Testing and review documentation.
 1. Read [DESIGN_NOTES.md](./design/DESIGN_NOTES.md) for architecture understanding
 2. Review [PROJECT_STRUCTURE.txt](./architecture/PROJECT_STRUCTURE.txt) for codebase layout
 3. Follow [GIT_COMMIT_GUIDE.md](./development/GIT_COMMIT_GUIDE.md) for contribution workflow
-4. Run tests using [TESTING.md](./qa/TESTING.md)
+4. Run tests using [TESTING.md](../TESTING.md)
 
 **For reviewers:**
 1. Read [PROJECT_SUMMARY.md](./prd/PROJECT_SUMMARY.md) for complete overview
@@ -110,8 +110,9 @@ docs/
 ├── development/                        # Development Guides
 │   └── GIT_COMMIT_GUIDE.md
 └── qa/                                 # Quality Assurance
-    ├── TESTING.md
     └── PROFESSIONAL_REVIEW_REPORT.md
+
+Note: TESTING.md is in the root directory (../TESTING.md)
 ```
 
 ---
